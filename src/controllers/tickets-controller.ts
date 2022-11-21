@@ -9,7 +9,7 @@ export async function getTicketByUser(req: AuthenticatedRequest, res: Response) 
   try {
     const ticketUser = await ticketService.getTicketByUser(userId);
 
-    return res.status(httpStatus.FOUND).send(ticketUser);
+    return res.status(httpStatus.OK).send(ticketUser);
   } catch (error) {
     return res.sendStatus(httpStatus.NOT_FOUND);        
   }
@@ -19,7 +19,7 @@ export async function getTickets(req: AuthenticatedRequest, res: Response) {
   try {
     const allTickets = await ticketService.getTickets();
 
-    return res.status(httpStatus.FOUND).send(allTickets);
+    return res.status(httpStatus.OK).send(allTickets);
   } catch (error) {
     return res.sendStatus(httpStatus.NOT_FOUND);
   }
@@ -27,14 +27,14 @@ export async function getTickets(req: AuthenticatedRequest, res: Response) {
 
 export async function postNewTicket(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
-  const { ticketId } = req.body;
+  const { ticketTypeId } = req.body;
     
   try {
-    const newTicket = await ticketService.createTicket(userId, ticketId);
+    const newTicket = await ticketService.createTicket(userId, ticketTypeId);
 
     return res.status(httpStatus.CREATED).send(newTicket);
   } catch (error) {
-    return res.sendStatus(httpStatus.NOT_FOUND);        
+    return res.sendStatus(httpStatus.BAD_REQUEST);        
   }
 }
 

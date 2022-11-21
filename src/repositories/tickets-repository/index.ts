@@ -8,7 +8,11 @@ async function findMany() {
 async function findTickedByUser(enrollmentId: number) {
   return prisma.ticket.findFirst({
     where: {
-      enrollmentId
+      enrollmentId,
+
+    },
+    include: {
+      TicketType: true
     }
   });
 }

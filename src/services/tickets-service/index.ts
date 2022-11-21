@@ -1,5 +1,6 @@
 import ticketsRepository from "@/repositories/tickets-repository";
 import { notFoundError } from "@/errors";
+import enrollmentRepository from "@/repositories/enrollment-repository";
 
 async function getTickets() {
   const ticket = await ticketsRepository.findMany();
@@ -8,13 +9,17 @@ async function getTickets() {
 }
 
 async function getTicketByUser(userId: number) {
-  const oneTicket = await ticketsRepository.findTickedByUser(userId);
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+
+  const oneTicket = await ticketsRepository.findTickedByUser(enrollment.id);
   if(!oneTicket) throw notFoundError();
   return oneTicket;
 }
 
-async function createTicket(ticketTypeId: number, enrollmentId: number) {
-  const newTicket = await ticketsRepository.createNewTicket(ticketTypeId, enrollmentId);
+async function createTicket(userId: number, ticketTypeId: number) {
+  const enrollment = await enrollmentRepository.findWithAddressByUserId(userId);
+
+  const newTicket = await ticketsRepository.createNewTicket(ticketTypeId, enrollment.id);
   return newTicket;
 }
 
